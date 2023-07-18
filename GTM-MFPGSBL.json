@@ -1,23 +1,22 @@
 {
     "exportFormatVersion": 2,
-    "exportTime": "2023-06-15 04:11:46",
+    "exportTime": "2023-07-18 09:26:55",
     "containerVersion": {
-        "path": "accounts/6104162691/containers/119389386/versions/2",
+        "path": "accounts/6104162691/containers/119389386/versions/3",
         "accountId": "6104162691",
         "containerId": "119389386",
-        "containerVersionId": "2",
-        "name": "IT 電子商務代碼測試",
-        "description": "IT 電子商務代碼測試",
+        "containerVersionId": "3",
+        "name": "POL-1275 GA4 IT 版本 追蹤事件列表",
         "container": {
             "path": "accounts/6104162691/containers/119389386",
             "accountId": "6104162691",
             "containerId": "119389386",
-            "name": "Polar-Test-Local-EEC-TRY",
+            "name": "Polar-IT-Version",
             "publicId": "GTM-MFPGSBL",
             "usageContext": [
                 "WEB"
             ],
-            "fingerprint": "1685287352259",
+            "fingerprint": "1687934922825",
             "tagManagerUrl": "https://tagmanager.google.com/#/container/accounts/6104162691/containers/119389386/workspaces?apiLink=container",
             "features": {
                 "supportUserPermissions": true,
@@ -43,7 +42,7 @@
             {
                 "accountId": "6104162691",
                 "containerId": "119389386",
-                "tagId": "4",
+                "tagId": "23",
                 "name": "GA4 - Configuration",
                 "type": "gaawc",
                 "parameter": [
@@ -63,7 +62,7 @@
                         "value": "{{cons_measurement_id}}"
                     }
                 ],
-                "fingerprint": "1685287622345",
+                "fingerprint": "1689667897211",
                 "firingTriggerId": [
                     "2147479553"
                 ],
@@ -78,7 +77,34 @@
             {
                 "accountId": "6104162691",
                 "containerId": "119389386",
-                "tagId": "5",
+                "tagId": "25",
+                "name": "HTML - DataLayer Flushing",
+                "type": "html",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "html",
+                        "value": "<script>\n// to be trigger as setup tag sequence for event tags\n/*** CONFIGURATION ***/\n  // Add the property keys that need to be flushed with each event\n  var dataLayerPropertiesToFlush = [\n    'content_name',\n    'content_type',\n    'content_views',\n    'content_clicks',\n    'engagement_type',\n    'file_extension',\n    'file_name',\n    'involvment_type',\n    'link_classes',\n    'link_domain',\n    'link_id',\n    'list_name',\n    'link_text',\n    'link_url',\n    'location',\n    'location_id',\n    'login_method',\n    'nav_type',\n    'nav_tree_text',\n    'outbound',\n    'percent_scrolled',\n    'shipping_tier',\n    'signup_location',\n    'social_network',\n    'time_started',\n    'time_completed',\n    'ecommerce'\n    ];\n  /*** END CONFIGURATION ***/\n\n  var previousPartialEvents = [];\n  function getPreviousPartialEvents(cursor) {\n    if (dataLayer[cursor - 1] && !dataLayer[cursor - 1].hasOwnProperty('event')) {\n      previousPartialEvents.push(dataLayer[cursor - 1]);\n      getPreviousPartialEvents(cursor - 1);\n    }\n  }\n\n  try {\n    var gtm = window.google_tag_manager[{{Container ID}}];\n\n    // Get the dataLayer array index for this event\n    var eventIndex = dataLayer.indexOf(\n      dataLayer\n      \t.filter(function(x) {\n          return x['gtm.uniqueEventId'] == gtm.dataLayer.get('gtm.uniqueEventId');\n        })[0]\n    );\n\n    // Get the event object\n    var event = dataLayer[eventIndex];\n\n    // Gather previously pushed non-event objects recursively\n    getPreviousPartialEvents(eventIndex);\n\n\t// Append any missing properties from previous partial events\n    if (previousPartialEvents.length > 0) {\n      previousPartialEvents.forEach(function(prevEvent) {\n        for (var prop in prevEvent) {\n          if (!event.hasOwnProperty(prop)) {\n            event[prop] = prevEvent[prop];\n          }\n        }\n      });\n    }\n\n    // Flush all values except 'event' with dataLayer.set()\n    dataLayerPropertiesToFlush.forEach(function(prop) {\n      if (prop != 'event') {\n        gtm.dataLayer.set(prop, undefined);\n      }\n    });\n\n    // Reattach event properties to the dataLayer\n    for (var prop in event) {\n      if (prop !== 'event' && event.hasOwnProperty(prop)) {\n        gtm.dataLayer.set(prop, event[prop]);\n      }\n    }\n  } catch (e) {}\n</script>"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "supportDocumentWrite",
+                        "value": "false"
+                    }
+                ],
+                "fingerprint": "1689667897220",
+                "tagFiringOption": "ONCE_PER_EVENT",
+                "monitoringMetadata": {
+                    "type": "MAP"
+                },
+                "consentSettings": {
+                    "consentStatus": "NOT_SET"
+                }
+            },
+            {
+                "accountId": "6104162691",
+                "containerId": "119389386",
+                "tagId": "27",
                 "name": "GA4 - EEC",
                 "type": "gaawe",
                 "parameter": [
@@ -172,7 +198,7 @@
                                     {
                                         "type": "TEMPLATE",
                                         "key": "value",
-                                        "value": "{{dl_ec_items}}"
+                                        "value": "{{dl_transfer_item}}"
                                     }
                                 ]
                             },
@@ -244,9 +270,9 @@
                         "value": "GA4 - Configuration"
                     }
                 ],
-                "fingerprint": "1685440909841",
+                "fingerprint": "1689667897212",
                 "firingTriggerId": [
-                    "16"
+                    "24"
                 ],
                 "setupTag": [
                     {
@@ -264,22 +290,51 @@
             {
                 "accountId": "6104162691",
                 "containerId": "119389386",
-                "tagId": "6",
-                "name": "HTML - DataLayer Flushing",
-                "type": "html",
+                "tagId": "30",
+                "name": "GA4 - Change_Language",
+                "type": "gaawe",
                 "parameter": [
                     {
-                        "type": "TEMPLATE",
-                        "key": "html",
-                        "value": "<script>\n// to be trigger as setup tag sequence for event tags\n/*** CONFIGURATION ***/\n  // Add the property keys that need to be flushed with each event\n  var dataLayerPropertiesToFlush = [\n    'content_name',\n    'content_type',\n    'content_views',\n    'content_clicks',\n    'engagement_type',\n    'file_extension',\n    'file_name',\n    'involvment_type',\n    'link_classes',\n    'link_domain',\n    'link_id',\n    'list_name',\n    'link_text',\n    'link_url',\n    'location',\n    'location_id',\n    'login_method',\n    'nav_type',\n    'nav_tree_text',\n    'outbound',\n    'percent_scrolled',\n    'shipping_tier',\n    'signup_location',\n    'social_network',\n    'time_started',\n    'time_completed',\n    'ecommerce'\n    ];\n  /*** END CONFIGURATION ***/\n\n  var previousPartialEvents = [];\n  function getPreviousPartialEvents(cursor) {\n    if (dataLayer[cursor - 1] && !dataLayer[cursor - 1].hasOwnProperty('event')) {\n      previousPartialEvents.push(dataLayer[cursor - 1]);\n      getPreviousPartialEvents(cursor - 1);\n    }\n  }\n\n  try {\n    var gtm = window.google_tag_manager[{{Container ID}}];\n\n    // Get the dataLayer array index for this event\n    var eventIndex = dataLayer.indexOf(\n      dataLayer\n      \t.filter(function(x) {\n          return x['gtm.uniqueEventId'] == gtm.dataLayer.get('gtm.uniqueEventId');\n        })[0]\n    );\n\n    // Get the event object\n    var event = dataLayer[eventIndex];\n\n    // Gather previously pushed non-event objects recursively\n    getPreviousPartialEvents(eventIndex);\n\n\t// Append any missing properties from previous partial events\n    if (previousPartialEvents.length > 0) {\n      previousPartialEvents.forEach(function(prevEvent) {\n        for (var prop in prevEvent) {\n          if (!event.hasOwnProperty(prop)) {\n            event[prop] = prevEvent[prop];\n          }\n        }\n      });\n    }\n\n    // Flush all values except 'event' with dataLayer.set()\n    dataLayerPropertiesToFlush.forEach(function(prop) {\n      if (prop != 'event') {\n        gtm.dataLayer.set(prop, undefined);\n      }\n    });\n\n    // Reattach event properties to the dataLayer\n    for (var prop in event) {\n      if (prop !== 'event' && event.hasOwnProperty(prop)) {\n        gtm.dataLayer.set(prop, event[prop]);\n      }\n    }\n  } catch (e) {}\n</script>"
+                        "type": "BOOLEAN",
+                        "key": "sendEcommerceData",
+                        "value": "false"
                     },
                     {
-                        "type": "BOOLEAN",
-                        "key": "supportDocumentWrite",
-                        "value": "false"
+                        "type": "TEMPLATE",
+                        "key": "eventName",
+                        "value": "change_language"
+                    },
+                    {
+                        "type": "LIST",
+                        "key": "eventParameters",
+                        "list": [
+                            {
+                                "type": "MAP",
+                                "map": [
+                                    {
+                                        "type": "TEMPLATE",
+                                        "key": "name",
+                                        "value": "lang"
+                                    },
+                                    {
+                                        "type": "TEMPLATE",
+                                        "key": "value",
+                                        "value": "{{dl_lang}}"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "TAG_REFERENCE",
+                        "key": "measurementId",
+                        "value": "GA4 - Configuration"
                     }
                 ],
-                "fingerprint": "1685333088696",
+                "fingerprint": "1689667897213",
+                "firingTriggerId": [
+                    "28"
+                ],
                 "tagFiringOption": "ONCE_PER_EVENT",
                 "monitoringMetadata": {
                     "type": "MAP"
@@ -291,7 +346,119 @@
             {
                 "accountId": "6104162691",
                 "containerId": "119389386",
-                "tagId": "19",
+                "tagId": "37",
+                "name": "GA4 - Sign_Up",
+                "type": "gaawe",
+                "parameter": [
+                    {
+                        "type": "BOOLEAN",
+                        "key": "sendEcommerceData",
+                        "value": "false"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "eventName",
+                        "value": "sign_up"
+                    },
+                    {
+                        "type": "LIST",
+                        "key": "eventParameters",
+                        "list": [
+                            {
+                                "type": "MAP",
+                                "map": [
+                                    {
+                                        "type": "TEMPLATE",
+                                        "key": "name",
+                                        "value": "method"
+                                    },
+                                    {
+                                        "type": "TEMPLATE",
+                                        "key": "value",
+                                        "value": "{{dl_login_method}}"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "TAG_REFERENCE",
+                        "key": "measurementId",
+                        "value": "GA4 - Configuration"
+                    }
+                ],
+                "fingerprint": "1689667897216",
+                "firingTriggerId": [
+                    "35"
+                ],
+                "tagFiringOption": "ONCE_PER_EVENT",
+                "monitoringMetadata": {
+                    "type": "MAP"
+                },
+                "consentSettings": {
+                    "consentStatus": "NOT_SET"
+                }
+            },
+            {
+                "accountId": "6104162691",
+                "containerId": "119389386",
+                "tagId": "39",
+                "name": "GA4 - Submit_Form",
+                "type": "gaawe",
+                "parameter": [
+                    {
+                        "type": "BOOLEAN",
+                        "key": "sendEcommerceData",
+                        "value": "false"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "eventName",
+                        "value": "submit_form"
+                    },
+                    {
+                        "type": "LIST",
+                        "key": "eventParameters",
+                        "list": [
+                            {
+                                "type": "MAP",
+                                "map": [
+                                    {
+                                        "type": "TEMPLATE",
+                                        "key": "name",
+                                        "value": "form_id"
+                                    },
+                                    {
+                                        "type": "TEMPLATE",
+                                        "key": "value",
+                                        "value": "{{dl_form_id}}"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "TAG_REFERENCE",
+                        "key": "measurementId",
+                        "value": "GA4 - Configuration"
+                    }
+                ],
+                "fingerprint": "1689667897217",
+                "firingTriggerId": [
+                    "38"
+                ],
+                "tagFiringOption": "ONCE_PER_EVENT",
+                "monitoringMetadata": {
+                    "type": "MAP"
+                },
+                "consentSettings": {
+                    "consentStatus": "NOT_SET"
+                }
+            },
+            {
+                "accountId": "6104162691",
+                "containerId": "119389386",
+                "tagId": "41",
                 "name": "GA4 - Scroll",
                 "type": "gaawe",
                 "parameter": [
@@ -311,9 +478,177 @@
                         "value": "GA4 - Configuration"
                     }
                 ],
-                "fingerprint": "1685539714947",
+                "fingerprint": "1689667897218",
                 "firingTriggerId": [
                     "18"
+                ],
+                "tagFiringOption": "ONCE_PER_EVENT",
+                "monitoringMetadata": {
+                    "type": "MAP"
+                },
+                "consentSettings": {
+                    "consentStatus": "NOT_SET"
+                }
+            },
+            {
+                "accountId": "6104162691",
+                "containerId": "119389386",
+                "tagId": "42",
+                "name": "GA4 - Login",
+                "type": "gaawe",
+                "parameter": [
+                    {
+                        "type": "BOOLEAN",
+                        "key": "sendEcommerceData",
+                        "value": "false"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "eventName",
+                        "value": "login"
+                    },
+                    {
+                        "type": "LIST",
+                        "key": "eventParameters",
+                        "list": [
+                            {
+                                "type": "MAP",
+                                "map": [
+                                    {
+                                        "type": "TEMPLATE",
+                                        "key": "name",
+                                        "value": "method"
+                                    },
+                                    {
+                                        "type": "TEMPLATE",
+                                        "key": "value",
+                                        "value": "{{dl_login_method}}"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "TAG_REFERENCE",
+                        "key": "measurementId",
+                        "value": "GA4 - Configuration"
+                    }
+                ],
+                "fingerprint": "1689667897218",
+                "firingTriggerId": [
+                    "34"
+                ],
+                "tagFiringOption": "ONCE_PER_EVENT",
+                "monitoringMetadata": {
+                    "type": "MAP"
+                },
+                "consentSettings": {
+                    "consentStatus": "NOT_SET"
+                }
+            },
+            {
+                "accountId": "6104162691",
+                "containerId": "119389386",
+                "tagId": "43",
+                "name": "GA4 - Add_Donor_Info",
+                "type": "gaawe",
+                "parameter": [
+                    {
+                        "type": "BOOLEAN",
+                        "key": "sendEcommerceData",
+                        "value": "false"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "eventName",
+                        "value": "add_donor_info"
+                    },
+                    {
+                        "type": "LIST",
+                        "key": "eventParameters",
+                        "list": [
+                            {
+                                "type": "MAP",
+                                "map": [
+                                    {
+                                        "type": "TEMPLATE",
+                                        "key": "name",
+                                        "value": "donor_id"
+                                    },
+                                    {
+                                        "type": "TEMPLATE",
+                                        "key": "value",
+                                        "value": "{{dl_donor_id}}"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "TAG_REFERENCE",
+                        "key": "measurementId",
+                        "value": "GA4 - Configuration"
+                    }
+                ],
+                "fingerprint": "1689667897219",
+                "firingTriggerId": [
+                    "40"
+                ],
+                "tagFiringOption": "ONCE_PER_EVENT",
+                "monitoringMetadata": {
+                    "type": "MAP"
+                },
+                "consentSettings": {
+                    "consentStatus": "NOT_SET"
+                }
+            },
+            {
+                "accountId": "6104162691",
+                "containerId": "119389386",
+                "tagId": "44",
+                "name": "GA4 - Add_Receipt_Info",
+                "type": "gaawe",
+                "parameter": [
+                    {
+                        "type": "BOOLEAN",
+                        "key": "sendEcommerceData",
+                        "value": "false"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "eventName",
+                        "value": "add_receipt_info"
+                    },
+                    {
+                        "type": "LIST",
+                        "key": "eventParameters",
+                        "list": [
+                            {
+                                "type": "MAP",
+                                "map": [
+                                    {
+                                        "type": "TEMPLATE",
+                                        "key": "name",
+                                        "value": "receipt_id"
+                                    },
+                                    {
+                                        "type": "TEMPLATE",
+                                        "key": "value",
+                                        "value": "{{dl_receipt_id}}"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "TAG_REFERENCE",
+                        "key": "measurementId",
+                        "value": "GA4 - Configuration"
+                    }
+                ],
+                "fingerprint": "1689667897219",
+                "firingTriggerId": [
+                    "20"
                 ],
                 "tagFiringOption": "ONCE_PER_EVENT",
                 "monitoringMetadata": {
@@ -325,31 +660,6 @@
             }
         ],
         "trigger": [
-            {
-                "accountId": "6104162691",
-                "containerId": "119389386",
-                "triggerId": "16",
-                "name": "CE - EEC - All",
-                "type": "CUSTOM_EVENT",
-                "customEventFilter": [
-                    {
-                        "type": "MATCH_REGEX",
-                        "parameter": [
-                            {
-                                "type": "TEMPLATE",
-                                "key": "arg0",
-                                "value": "{{_event}}"
-                            },
-                            {
-                                "type": "TEMPLATE",
-                                "key": "arg1",
-                                "value": "^view_item_list|(view|select)_item|(add_to|remove_from)_cart|begin_checkout|checkout_progress(.*)|add_payment_info|set_checkout_option|purchase|refund|(view|select)_promotion$"
-                            }
-                        ]
-                    }
-                ],
-                "fingerprint": "1685422525207"
-            },
             {
                 "accountId": "6104162691",
                 "containerId": "119389386",
@@ -384,25 +694,184 @@
                         "value": "false"
                     }
                 ]
-            }
-        ],
-        "variable": [
+            },
             {
                 "accountId": "6104162691",
                 "containerId": "119389386",
-                "variableId": "3",
-                "name": "cons_measurement_id",
-                "type": "c",
-                "parameter": [
+                "triggerId": "20",
+                "name": "Add_Receipt_Info",
+                "type": "CUSTOM_EVENT",
+                "customEventFilter": [
                     {
-                        "type": "TEMPLATE",
-                        "key": "value",
-                        "value": "G-WEG6MQGE7Q"
+                        "type": "EQUALS",
+                        "parameter": [
+                            {
+                                "type": "TEMPLATE",
+                                "key": "arg0",
+                                "value": "{{_event}}"
+                            },
+                            {
+                                "type": "TEMPLATE",
+                                "key": "arg1",
+                                "value": "add_receipt_info"
+                            }
+                        ]
                     }
                 ],
-                "fingerprint": "1685287535061",
-                "formatValue": {}
+                "fingerprint": "1689667897209"
             },
+            {
+                "accountId": "6104162691",
+                "containerId": "119389386",
+                "triggerId": "24",
+                "name": "CE - EEC - All",
+                "type": "CUSTOM_EVENT",
+                "customEventFilter": [
+                    {
+                        "type": "MATCH_REGEX",
+                        "parameter": [
+                            {
+                                "type": "TEMPLATE",
+                                "key": "arg0",
+                                "value": "{{_event}}"
+                            },
+                            {
+                                "type": "TEMPLATE",
+                                "key": "arg1",
+                                "value": "^view_item_list|(view|select)_item|(add_to|remove_from|view)_cart|begin_checkout|checkout_progress(.*)|add_payment_info|set_checkout_option|purchase|refund|(view|select)_promotion$"
+                            }
+                        ]
+                    }
+                ],
+                "fingerprint": "1689667897211"
+            },
+            {
+                "accountId": "6104162691",
+                "containerId": "119389386",
+                "triggerId": "28",
+                "name": "Change_Language",
+                "type": "CUSTOM_EVENT",
+                "customEventFilter": [
+                    {
+                        "type": "EQUALS",
+                        "parameter": [
+                            {
+                                "type": "TEMPLATE",
+                                "key": "arg0",
+                                "value": "{{_event}}"
+                            },
+                            {
+                                "type": "TEMPLATE",
+                                "key": "arg1",
+                                "value": "change_language"
+                            }
+                        ]
+                    }
+                ],
+                "fingerprint": "1689667897212"
+            },
+            {
+                "accountId": "6104162691",
+                "containerId": "119389386",
+                "triggerId": "34",
+                "name": "Login",
+                "type": "CUSTOM_EVENT",
+                "customEventFilter": [
+                    {
+                        "type": "EQUALS",
+                        "parameter": [
+                            {
+                                "type": "TEMPLATE",
+                                "key": "arg0",
+                                "value": "{{_event}}"
+                            },
+                            {
+                                "type": "TEMPLATE",
+                                "key": "arg1",
+                                "value": "login"
+                            }
+                        ]
+                    }
+                ],
+                "fingerprint": "1689667897215"
+            },
+            {
+                "accountId": "6104162691",
+                "containerId": "119389386",
+                "triggerId": "35",
+                "name": "Sign_Up",
+                "type": "CUSTOM_EVENT",
+                "customEventFilter": [
+                    {
+                        "type": "EQUALS",
+                        "parameter": [
+                            {
+                                "type": "TEMPLATE",
+                                "key": "arg0",
+                                "value": "{{_event}}"
+                            },
+                            {
+                                "type": "TEMPLATE",
+                                "key": "arg1",
+                                "value": "sign_up"
+                            }
+                        ]
+                    }
+                ],
+                "fingerprint": "1689667897215"
+            },
+            {
+                "accountId": "6104162691",
+                "containerId": "119389386",
+                "triggerId": "38",
+                "name": "Submit_Form",
+                "type": "CUSTOM_EVENT",
+                "customEventFilter": [
+                    {
+                        "type": "EQUALS",
+                        "parameter": [
+                            {
+                                "type": "TEMPLATE",
+                                "key": "arg0",
+                                "value": "{{_event}}"
+                            },
+                            {
+                                "type": "TEMPLATE",
+                                "key": "arg1",
+                                "value": "submit_form"
+                            }
+                        ]
+                    }
+                ],
+                "fingerprint": "1689667897217"
+            },
+            {
+                "accountId": "6104162691",
+                "containerId": "119389386",
+                "triggerId": "40",
+                "name": "Add_Donor_Info",
+                "type": "CUSTOM_EVENT",
+                "customEventFilter": [
+                    {
+                        "type": "EQUALS",
+                        "parameter": [
+                            {
+                                "type": "TEMPLATE",
+                                "key": "arg0",
+                                "value": "{{_event}}"
+                            },
+                            {
+                                "type": "TEMPLATE",
+                                "key": "arg1",
+                                "value": "add_donor_info"
+                            }
+                        ]
+                    }
+                ],
+                "fingerprint": "1689667897218"
+            }
+        ],
+        "variable": [
             {
                 "accountId": "6104162691",
                 "containerId": "119389386",
@@ -636,6 +1105,194 @@
                 ],
                 "fingerprint": "1685372893293",
                 "formatValue": {}
+            },
+            {
+                "accountId": "6104162691",
+                "containerId": "119389386",
+                "variableId": "21",
+                "name": "dl_donor_id",
+                "type": "v",
+                "parameter": [
+                    {
+                        "type": "INTEGER",
+                        "key": "dataLayerVersion",
+                        "value": "2"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "setDefaultValue",
+                        "value": "false"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "name",
+                        "value": "donor_id"
+                    }
+                ],
+                "fingerprint": "1689667897210",
+                "formatValue": {}
+            },
+            {
+                "accountId": "6104162691",
+                "containerId": "119389386",
+                "variableId": "22",
+                "name": "cons_measurement_id",
+                "type": "c",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "value",
+                        "value": "G-WEG6MQGE7Q"
+                    }
+                ],
+                "fingerprint": "1689667936435",
+                "formatValue": {}
+            },
+            {
+                "accountId": "6104162691",
+                "containerId": "119389386",
+                "variableId": "26",
+                "name": "dl_transfer_item",
+                "type": "jsm",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "javascript",
+                        "value": "function() {\n  // Make a shallow copy of the ecommerce object\n  var items = JSON.parse(JSON.stringify({{dl_ec_items}}));\n  for (var i = 0; i < items.length; i++) {\n    items[i]['item_name'] = items[i]['product_name'];\n  }\n  return items;\n}"
+                    }
+                ],
+                "fingerprint": "1689667897220",
+                "formatValue": {}
+            },
+            {
+                "accountId": "6104162691",
+                "containerId": "119389386",
+                "variableId": "29",
+                "name": "dl_lang",
+                "type": "v",
+                "parameter": [
+                    {
+                        "type": "INTEGER",
+                        "key": "dataLayerVersion",
+                        "value": "2"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "setDefaultValue",
+                        "value": "false"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "name",
+                        "value": "lang"
+                    }
+                ],
+                "fingerprint": "1689667897213",
+                "formatValue": {}
+            },
+            {
+                "accountId": "6104162691",
+                "containerId": "119389386",
+                "variableId": "31",
+                "name": "dl_receipt_id",
+                "type": "v",
+                "parameter": [
+                    {
+                        "type": "INTEGER",
+                        "key": "dataLayerVersion",
+                        "value": "2"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "setDefaultValue",
+                        "value": "false"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "name",
+                        "value": "receipt_id"
+                    }
+                ],
+                "fingerprint": "1689667897214",
+                "formatValue": {}
+            },
+            {
+                "accountId": "6104162691",
+                "containerId": "119389386",
+                "variableId": "32",
+                "name": "dl_ec_item_name",
+                "type": "v",
+                "parameter": [
+                    {
+                        "type": "INTEGER",
+                        "key": "dataLayerVersion",
+                        "value": "2"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "setDefaultValue",
+                        "value": "false"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "name",
+                        "value": "ecommerce.item.name"
+                    }
+                ],
+                "fingerprint": "1689667897214",
+                "formatValue": {}
+            },
+            {
+                "accountId": "6104162691",
+                "containerId": "119389386",
+                "variableId": "33",
+                "name": "dl_form_id",
+                "type": "v",
+                "parameter": [
+                    {
+                        "type": "INTEGER",
+                        "key": "dataLayerVersion",
+                        "value": "2"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "setDefaultValue",
+                        "value": "false"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "name",
+                        "value": "form_id"
+                    }
+                ],
+                "fingerprint": "1689667897215",
+                "formatValue": {}
+            },
+            {
+                "accountId": "6104162691",
+                "containerId": "119389386",
+                "variableId": "36",
+                "name": "dl_login_method",
+                "type": "v",
+                "parameter": [
+                    {
+                        "type": "INTEGER",
+                        "key": "dataLayerVersion",
+                        "value": "2"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "setDefaultValue",
+                        "value": "false"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "name",
+                        "value": "method"
+                    }
+                ],
+                "fingerprint": "1689667897216",
+                "formatValue": {}
             }
         ],
         "builtInVariable": [
@@ -672,6 +1329,42 @@
             {
                 "accountId": "6104162691",
                 "containerId": "119389386",
+                "type": "FORM_ELEMENT",
+                "name": "Form Element"
+            },
+            {
+                "accountId": "6104162691",
+                "containerId": "119389386",
+                "type": "FORM_CLASSES",
+                "name": "Form Classes"
+            },
+            {
+                "accountId": "6104162691",
+                "containerId": "119389386",
+                "type": "FORM_ID",
+                "name": "Form ID"
+            },
+            {
+                "accountId": "6104162691",
+                "containerId": "119389386",
+                "type": "FORM_TARGET",
+                "name": "Form Target"
+            },
+            {
+                "accountId": "6104162691",
+                "containerId": "119389386",
+                "type": "FORM_URL",
+                "name": "Form URL"
+            },
+            {
+                "accountId": "6104162691",
+                "containerId": "119389386",
+                "type": "FORM_TEXT",
+                "name": "Form Text"
+            },
+            {
+                "accountId": "6104162691",
+                "containerId": "119389386",
                 "type": "DEBUG_MODE",
                 "name": "Debug Mode"
             },
@@ -700,7 +1393,7 @@
                 "name": "Scroll Direction"
             }
         ],
-        "fingerprint": "1686801391360",
-        "tagManagerUrl": "https://tagmanager.google.com/#/versions/accounts/6104162691/containers/119389386/versions/2?apiLink=version"
+        "fingerprint": "1689671401961",
+        "tagManagerUrl": "https://tagmanager.google.com/#/versions/accounts/6104162691/containers/119389386/versions/3?apiLink=version"
     }
 }
